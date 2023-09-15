@@ -9,14 +9,17 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var menuOutlet: UILabel!
     var items: [String] = ["Cappuccino", "Latte", "Frappuccino", "Coffee", "Tea"]
-    var prices: [Double] = [5.5, 4.5, 5.0, 3.5, 3.0]
+    var prices: [Double] = [5.50, 4.50, 5.00, 3.50, 3.00]
+    
+    var shopingCart: [String : Double] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         for i in 0 ..< items.count{
-            print("\(items[i]): $\(prices[i])")
+            menuOutlet.text! += "\(items[i]): $\(prices[i])"
         }
         
     }
