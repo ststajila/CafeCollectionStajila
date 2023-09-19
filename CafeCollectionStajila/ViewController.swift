@@ -9,25 +9,45 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var menuOutlet: UILabel!
+    @IBOutlet weak var menuOutlet: UITextView!
+    @IBOutlet weak var cartOutlet: UITextView!
+    @IBOutlet weak var totalOutlet: UILabel!
     var items: [String] = ["Cappuccino", "Latte", "Frappuccino", "Coffee", "Tea"]
     var prices: [Double] = [5.50, 4.50, 5.00, 3.50, 3.00]
     var shopingCart: [String: Double] = [:]
+    
     @IBOutlet weak var foodOrderInput: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        menuOutlet.text = "Menu: "
         for i in 0 ..< items.count{
-            menuOutlet.text! += "\(items[i]): $\(prices[i])\n"
+            menuOutlet.text = "\(menuOutlet.text!) \n\(items[i]): $\(prices[i])"
         }
     }
     
     @IBAction func addingToCartFunction(_ sender: Any) {
         
-        if checkItem(foodOrderInput.text, items) {
-            
+        if let order = foodOrderInput.text{
+            var index: Int?
+            if checkItem(name: order, array: items) {
+                for i in 0 ..< items.count{
+                    if order == items[i]{
+                        index = i;
+                    }
+                }
+                shopingCart[order] = prices[index!]
+                cartOutlet.text = ""
+                for items in shopingCart {
+                    cartOutlet.text += "\(items.key) - $\(items.value)\n"
+                    
+                }
+                }
+        } else{
+            print("Invalid data type: type a String")
         }
+        
         
     }
     
