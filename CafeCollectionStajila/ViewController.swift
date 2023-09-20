@@ -9,6 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var statusCheck: UILabel!
     @IBOutlet weak var menuOutlet: UITextView!
     @IBOutlet weak var cartOutlet: UITextView!
     @IBOutlet weak var totalOutlet: UILabel!
@@ -17,38 +18,55 @@ class ViewController: UIViewController {
     var shopingCart: [String: Double] = [:]
     
     @IBOutlet weak var foodOrderInput: UITextField!
+    @IBOutlet weak var quantityInputOutlet: UITextField!
+    var total: Double = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        statusCheck.backgroundColor = UIColor.green
+        statusCheck.text = "You are good to continue shoping"
         menuOutlet.text = "Menu: "
         for i in 0 ..< items.count{
             menuOutlet.text = "\(menuOutlet.text!) \n\(items[i]): $\(prices[i])"
         }
+        
     }
     
     @IBAction func addingToCartFunction(_ sender: Any) {
         
-        if let order = foodOrderInput.text{
+        if let order = foodOrderInput.text {
             var index: Int?
             if checkItem(name: order, array: items) {
+                if let q = Int(quantityInputOutlet.text!){
                 for i in 0 ..< items.count{
                     if order == items[i]{
                         index = i;
+                        total += prices[i] * Double(q)
                     }
                 }
-                shopingCart[order] = prices[index!]
-                cartOutlet.text = ""
-                for items in shopingCart {
-                    cartOutlet.text += "\(items.key) - $\(items.value)\n"
+                
+                    shopingCart[order] = prices[index!]
+                    cartOutlet.text = ""
+                    for items in shopingCart {
+                        cartOutlet.text += "\(items.key) \n"
+                    }
                     
+                    totalOutlet.text = "Total: $\(total)"
+                    statusCheck.backgroundColor = UIColor.green
+                    statusCheck.text = "You are good to continue shoping"
+                } else{
+                    statusCheck.backgroundColor = UIColor.red
+                    statusCheck.text = "Use only whole numbers in the quantity field"
                 }
-                }
-        } else{
-            print("Invalid data type: type a String")
+                
+            } else {
+                statusCheck.backgroundColor = UIColor.red
+                statusCheck.text = "The item is not in the Menu"
+                
+            }
         }
-        
-        
     }
     
     func checkItem(name: String, array: [String]) -> Bool{
