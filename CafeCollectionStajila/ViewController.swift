@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var statusCheck: UILabel!
     @IBOutlet weak var menuOutlet: UITextView!
@@ -25,6 +25,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        foodOrderInput.delegate
+        quantityInputOutlet.delegate
+        
         statusCheck.backgroundColor = UIColor.green
         statusCheck.text = "You are good to continue shoping"
         menuOutlet.text = "Menu: "
@@ -39,26 +42,31 @@ class ViewController: UIViewController {
         if let order = foodOrderInput.text {
             var index: Int?
             if checkItem(name: order, array: items) {
-                if let q = Int(quantityInputOutlet.text!){
-                for i in 0 ..< items.count{
-                    if order == items[i]{
-                        index = i;
-                        total += prices[i] * Double(q)
+                if isInCart(item: order, cart: shopingCart){
+                    if let q = Int(quantityInputOutlet.text!){
+                        for i in 0 ..< items.count{
+                            if order == items[i]{
+                                index = i;
+                                total += prices[i] * Double(q)
+                            }
+                        }
+                        
+                        shopingCart[order] = prices[index!]
+                        cartOutlet.text = ""
+                        for items in shopingCart {
+                            cartOutlet.text += "\(items.key) \n"
+                        }
+                        
+                        totalOutlet.text = "Total: $\(total)"
+                        statusCheck.backgroundColor = UIColor.green
+                        statusCheck.text = "You are good to continue shoping"
+                    } else{
+                        statusCheck.backgroundColor = UIColor.red
+                        statusCheck.text = "Use only whole numbers in the quantity field"
                     }
-                }
-                
-                    shopingCart[order] = prices[index!]
-                    cartOutlet.text = ""
-                    for items in shopingCart {
-                        cartOutlet.text += "\(items.key) \n"
-                    }
-                    
-                    totalOutlet.text = "Total: $\(total)"
-                    statusCheck.backgroundColor = UIColor.green
-                    statusCheck.text = "You are good to continue shoping"
                 } else{
                     statusCheck.backgroundColor = UIColor.red
-                    statusCheck.text = "Use only whole numbers in the quantity field"
+                    statusCheck.text = "The item is already in the cart!"
                 }
                 
             } else {
@@ -78,7 +86,20 @@ class ViewController: UIViewController {
         return false;
     }
     
-
+    func isInCart(item: String, cart: [String: Double]) -> Bool{
+        for items in cart{
+            if items.key == item{
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        foodOrderInput.resignFirstResponder()
+        quantityInputOutlet.resignFirstResponder()
+        return true
+    }
   
    
 }
