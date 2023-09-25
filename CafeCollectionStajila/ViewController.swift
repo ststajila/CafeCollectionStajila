@@ -21,12 +21,22 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var quantityInputOutlet: UITextField!
     var total: Double = 0
     
+    @IBOutlet weak var passwordOutlet: UITextField!
+    
+    @IBOutlet weak var itemRegister: UITextField!
+    
+    @IBOutlet weak var priceRegister: UITextField!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         foodOrderInput.delegate
         quantityInputOutlet.delegate
+        passwordOutlet.delegate
+        itemRegister.delegate
+        priceRegister.delegate
         
         statusCheck.backgroundColor = UIColor.green
         statusCheck.text = "You are good to continue shoping"
@@ -77,6 +87,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    
     func checkItem(name: String, array: [String]) -> Bool{
         for item in array{
             if name == item{
@@ -98,9 +109,37 @@ class ViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         foodOrderInput.resignFirstResponder()
         quantityInputOutlet.resignFirstResponder()
+        passwordOutlet.resignFirstResponder()
+        itemRegister.resignFirstResponder()
+        priceRegister.resignFirstResponder()
         return true
     }
-  
-   
+    
+    func adminLogin(password: String) -> Bool{
+        if password == "pony"{
+            return true
+        }
+        return false
+    }
+    
+    @IBAction func additemAction(_ sender: Any) {
+        if adminLogin(password: passwordOutlet.text!){
+            
+            if checkItem(name: itemRegister.text!, array: items){
+                
+                statusCheck.backgroundColor = UIColor.red
+                statusCheck.text = "The item is already in the menu, you cannot add it!"
+            }
+            else{
+                
+//                if itemRegister.text!.c
+                items.append(itemRegister.text!)
+                statusCheck.backgroundColor = UIColor.green
+                statusCheck.text = "New item is added to the menu!"
+            }
+                
+            
+        }
+        
+    }
 }
-
