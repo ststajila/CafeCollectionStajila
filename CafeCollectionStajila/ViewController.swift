@@ -54,23 +54,28 @@ class ViewController: UIViewController, UITextFieldDelegate {
             if checkItem(name: order, array: items) {
                 if isInCart(item: order, cart: shopingCart){
                     if let q = Int(quantityInputOutlet.text!){
-                        for i in 0 ..< items.count{
-                            if order == items[i]{
-                                index = i;
-                                total += prices[i] * Double(q)
+                        if q > 0{
+                            for i in 0 ..< items.count{
+                                if order == items[i]{
+                                    index = i;
+                                    total += prices[i] * Double(q)
+                                }
                             }
-                        }
-                        
-                        shopingCart[order] = prices[index!]
-                        cartOutlet.text = ""
-                        for items in shopingCart {
-                            cartOutlet.text += "\(items.key) \n"
-                        }
-                        
-                        totalOutlet.text = "Total: $\(total)"
-                        statusCheck.backgroundColor = UIColor.green
-                        statusCheck.text = "You are good to continue shoping"
+                            
+                            shopingCart[order] = prices[index!]
+                            cartOutlet.text = ""
+                            for items in shopingCart {
+                                cartOutlet.text += "\(items.key) \n"
+                            }
+                            
+                            totalOutlet.text = "Total: $\(total)"
+                            statusCheck.backgroundColor = UIColor.green
+                            statusCheck.text = "You are good to continue shoping"
                     } else{
+                        statusCheck.backgroundColor = UIColor.red
+                        statusCheck.text = "Use only whole numbers > or = 0"
+                    }
+                } else{
                         statusCheck.backgroundColor = UIColor.red
                         statusCheck.text = "Use only whole numbers in the quantity field"
                     }
@@ -106,15 +111,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         return true;
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        foodOrderInput.resignFirstResponder()
-        quantityInputOutlet.resignFirstResponder()
-        passwordOutlet.resignFirstResponder()
-        itemRegister.resignFirstResponder()
-        priceRegister.resignFirstResponder()
-        return true
-    }
-    
     func adminLogin(password: String) -> Bool{
         if password == "pony"{
             return true
@@ -127,19 +123,56 @@ class ViewController: UIViewController, UITextFieldDelegate {
             
             if checkItem(name: itemRegister.text!, array: items){
                 
+                
                 statusCheck.backgroundColor = UIColor.red
                 statusCheck.text = "The item is already in the menu, you cannot add it!"
             }
             else{
                 
 //                if itemRegister.text!.c
-                items.append(itemRegister.text!)
-                statusCheck.backgroundColor = UIColor.green
-                statusCheck.text = "New item is added to the menu!"
+                if let i = itemRegister.text{
+                    if i.index(of: " ") < 0{
+                        
+                        items.append(i)
+                        
+                        if let p = Double(priceRegister.text!){
+                            if p >= 0 {
+                                prices.append(p)
+                                
+                                for i in 0 ..< items.count{
+                                    menuOutlet.text = "\(menuOutlet.text!) \n\(items[i]): $\(prices[i])"
+                                }
+                                statusCheck.backgroundColor = UIColor.green
+                                statusCheck.text = "New item is added to the menu!"
+                            } else {
+                                statusCheck.backgroundColor = UIColor.red
+                                statusCheck.text = "The price cannot = 0 or be negative!"
+                            }
+                            
+                        } else {
+                            statusCheck.backgroundColor = UIColor.red
+                            statusCheck.text = "The price of the item must be a number!"
+                        }
+                        
+                    } else {
+                        statusCheck.backgroundColor = UIColor.red
+                        statusCheck.text = "No spaces allowed for items"
+                    }
+                    }
+                
             }
                 
             
         }
         
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        foodOrderInput.resignFirstResponder()
+        quantityInputOutlet.resignFirstResponder()
+        passwordOutlet.resignFirstResponder()
+        itemRegister.resignFirstResponder()
+        priceRegister.resignFirstResponder()
+        return true
     }
 }
