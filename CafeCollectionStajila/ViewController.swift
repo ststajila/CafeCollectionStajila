@@ -118,7 +118,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         return false
     }
     
-    @IBAction func additemAction(_ sender: Any) {
+    @IBAction func addItemAction(_ sender: Any) {
         if adminLogin(password: passwordOutlet.text!){
             
             if checkItem(name: itemRegister.text!, array: items){
@@ -131,14 +131,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 
 //                if itemRegister.text!.c
                 if let i = itemRegister.text{
-                    if i.index(of: " ") < 0{
+                    if Int(i.index(of: " ")!) < 0{
                         
                         items.append(i)
                         
                         if let p = Double(priceRegister.text!){
                             if p >= 0 {
                                 prices.append(p)
-                                
+                                menuOutlet.text = " "
                                 for i in 0 ..< items.count{
                                     menuOutlet.text = "\(menuOutlet.text!) \n\(items[i]): $\(prices[i])"
                                 }
