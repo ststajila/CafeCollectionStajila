@@ -13,8 +13,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var menuOutlet: UITextView!
     @IBOutlet weak var cartOutlet: UITextView!
     @IBOutlet weak var totalOutlet: UILabel!
-    var items: [String] = ["Cappuccino", "Latte", "Frappuccino", "Coffee", "Tea"]
-    var prices: [Double] = [5.50, 4.50, 5.00, 3.50, 3.00]
+    var items: [String] = ["Coffee", "Cappuccino", "Frappuccino", "Latte", "Tea"]
+    var prices: [Double] = [3.99, 4.99, 4.59, 5.49, 2.99]
     var shopingCart: [String: Double] = [:]
     
     @IBOutlet weak var foodOrderInput: UITextField!
@@ -129,9 +129,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             }
             else{
                 
-//                if itemRegister.text!.c
                 if let i = itemRegister.text{
-                    if Int(i.index(of: " ")!) < 0{
                         
                         items.append(i)
                         
@@ -139,6 +137,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
                             if p >= 0 {
                                 prices.append(p)
                                 menuOutlet.text = " "
+                                
+
                                 for i in 0 ..< items.count{
                                     menuOutlet.text = "\(menuOutlet.text!) \n\(items[i]): $\(prices[i])"
                                 }
@@ -154,15 +154,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
                             statusCheck.text = "The price of the item must be a number!"
                         }
                         
-                    } else {
-                        statusCheck.backgroundColor = UIColor.red
-                        statusCheck.text = "No spaces allowed for items"
-                    }
                     }
                 
             }
                 
             
+        } else{
+            statusCheck.backgroundColor = UIColor.red
+            statusCheck.text = "Invalid admin password"
         }
         
     }
