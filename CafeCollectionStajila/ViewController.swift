@@ -37,11 +37,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        foodOrderInput.delegate
-        quantityInputOutlet.delegate
-        passwordOutlet.delegate
-        itemRegister.delegate
-        priceRegister.delegate
+        foodOrderInput.delegate = self
+        quantityInputOutlet.delegate = self
+        passwordOutlet.delegate = self
+        itemRegister.delegate = self
+        priceRegister.delegate = self
         
         statusCheck.backgroundColor = UIColor.green
         statusCheck.text = "You are good to continue shoping"
